@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hi-헬퍼 AI 설계 시스템</title>
+    <!-- Google Fonts: Pretendard & Material Symbols -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+        <div class="nav-left">
+            <div class="logo">
+                <span class="material-symbols-outlined">health_and_safety</span>
+                <h1>Hi-헬퍼</h1>
+            </div>
+            <div id="screen-title" class="screen-title">1. 도입_고객정보 입력</div>
+        </div>
+    </header>
+    <nav class="sub-nav">
+        <div class="sub-nav-brand">영업포탈</div>
+        <ul class="sub-nav-links">
+            <li class="active">고객</li>
+            <li>장기</li>
+            <li>자동차</li>
+            <li>일반</li>
+            <li>경리</li>
+            <li>실적/소득</li>
+            <li>영업지원</li>
+            <li>영업교육</li>
+            <li>보상</li>
+            <li>완전판매</li>
+            <li>방카</li>
+        </ul>
+    </nav>
+
+    <main id="app-container">
+        <!-- Screen 1: Customer Search -->
+        <section id="screen1" class="screen active">
+            <div class="screen1-layout">
+                <!-- Main Search Area -->
+                <div class="main-search-card card glass">
+                    <div class="search-hero">
+                        <h2>고객 정보를 입력하세요</h2>
+                        <p class="subtitle">AI가 최적의 보험 설계를 도와드립니다</p>
+                    </div>
+                    
+                    <div class="search-input-group">
+                        <div class="input-wrapper">
+                            <span class="material-symbols-outlined icon">badge</span>
+                            <input type="text" id="rrn-input" value="900101-1234567" placeholder="주민등록번호 입력">
+                            <button id="search-btn-icon" class="btn-icon" aria-label="검색">
+                                <span class="material-symbols-outlined">search</span>
+                            </button>
+                        </div>
+                        <div class="grade-select-wrapper">
+                            <label for="grade-input" class="grade-label">급수</label>
+                            <select id="grade-input" class="grade-select">
+                                <option value="" selected>선택</option>
+                                <option value="1">1급</option>
+                                <option value="2">2급</option>
+                                <option value="3">3급</option>
+                            </select>
+                        </div>
+                        <div class="age-badge">보험나이 : <span class="highlight">36</span></div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="btn-new-customer" class="btn btn-secondary" onclick="showNewCustomerModal()">신규고객입력</button>
+                        <button id="btn-consent" class="btn btn-secondary" onclick="showConsentModal()">가입설계동의</button>
+                        <button id="search-btn-main" class="btn btn-primary pulse">
+                            <span class="material-symbols-outlined">person_search</span>
+                            조회하기
+                        </button>
+                    </div>
+                    <p class="tip-text">동의고객: 900101-1234567 또는 900101-1000000 &nbsp;|&nbsp; 가설계: 생년월일6자리-성별(1 또는 2) 예) 900101-1</p>
+                </div>
+
+                <!-- Sidebar Area -->
+                <aside class="sidebar">
+                    <div class="side-card card">
+                        <div class="card-header">
+                            <span class="material-symbols-outlined">list_alt</span>
+                            <h3>설계동의고객</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mini-search">
+                                <input type="text" placeholder="이름 검색">
+                                <button class="btn-icon"><span class="material-symbols-outlined">search</span></button>
+                            </div>
+                            <p class="section-label">최근 조회 고객</p>
+                            <table class="data-table small">
+                                <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th>주민번호</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-customers-tbody">
+                                    <tr onclick="document.getElementById('rrn-input').value='900101-1234567'"><td>김현대</td><td>910101-1234567</td></tr>
+                                    <tr onclick="document.getElementById('rrn-input').value='900101-1000000'"><td>이샘플</td><td>900101-1000000</td></tr>
+                                    <tr><td>김고객</td><td>850505-2234567</td></tr>
+                                    <tr><td>박테스트</td><td>880101-1234567</td></tr>
+                                    <tr><td>최가설</td><td>870707-1234567</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="side-card card">
+                        <div class="card-header">
+                            <span class="material-symbols-outlined">edit_document</span>
+                            <h3>가설계고객</h3>
+                        </div>
+                        <div class="card-body mock-form">
+                            <div class="form-row"><label>이름</label><input type="text" value="고객명" readonly></div>
+                            <div class="form-row"><label>생년월일</label><input type="text" value="900101" readonly></div>
+                            <div class="form-row"><label>성별</label><input type="text" value="남" readonly></div>
+                            <div class="form-row"><label>직업</label><input type="text" value="사무직" readonly></div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Screen 2: Dashboard -->
+        <section id="screen2" class="screen">
+            <div class="dashboard-top-section">
+                <!-- Customer Card -->
+                <div class="dashboard-card customer-card card">
+                    <div class="card-header solid">
+                        <h3>고객 정보</h3>
+                        <span id="cust-name-title" class="title-badge">김현대 900101-1234567</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="cust-info-text" class="info-list">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="summary-grid" id="summary-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Request Card -->
+                <div class="dashboard-card ai-request-card card gradient-border">
+                    <div class="card-header ai-header">
+                        <span class="material-symbols-outlined">auto_awesome</span>
+                        <h3>AI 맞춤 설계 의뢰하기</h3>
+                    </div>
+                    <div class="card-body flex-col">
+                        <div class="ai-request-options">
+                            <label class="radio-option">
+                                <input type="radio" name="design_type" value="원클릭AI설계(종합보험)" checked>
+                                <span class="radio-label">원클릭AI설계 (종합보험)</span>
+                            </label>
+                            <label class="radio-option" id="custom-ai-option">
+                                <input type="radio" name="design_type" value="맞춤 AI설계" id="custom-ai-radio">
+                                <span class="radio-label">맞춤 AI설계</span>
+                            </label>
+                        </div>
+                        <button id="run-ai-btn" class="btn btn-ai pulse-glow mt-auto">
+                            <span class="material-symbols-outlined">magic_button</span> AI 설계 요청
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI Import Card -->
+                <div class="dashboard-card ai-import-card card">
+                    <div class="card-header ai-header-secondary">
+                        <span class="material-symbols-outlined">download</span>
+                        <h3>AI 인수 요청하기</h3>
+                    </div>
+                    <div class="card-body flex-col">
+                        <div class="ai-import-options">
+                            <label class="radio-option">
+                                <input type="radio" name="import_type" value="내 설계 불러오기" checked>
+                                <span class="radio-label">내 설계 불러오기</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="import_type" value="추천설계 불러오기">
+                                <span class="radio-label">추천설계 불러오기</span>
+                            </label>
+                        </div>
+                        <button id="btn-import-plan" class="btn btn-secondary mt-auto">AI 설계 요청</button>
+                    </div>
+                </div>
+
+                <!-- Detailed Progress Stepper -->
+                <div class="stepper-container card">
+                    <div class="stepper-flex">
+                        <div class="step-label-box">진행단계</div>
+                        <div class="steps-wrapper">
+                            <div class="step-box active highlight" id="step-1">설계요청</div>
+                            <div class="step-dash"></div>
+                            <div class="step-box" id="step-2">설계 중</div>
+                            <div class="step-dash"></div>
+                            <div class="step-box" id="step-3">AI심사중</div>
+                            <div class="step-dash"></div>
+                            <div class="step-box" id="step-4">플랜비교</div>
+                            <div class="step-dash"></div>
+                            <div class="step-box" id="step-5">누적점검</div>
+                            <div class="step-dash"></div>
+                            <div class="step-box" id="step-6">설계 완료</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-layout">
+                <div class="bottom-left">
+                    <div class="card side-panel flex-grow">
+                        <div class="card-header accent">
+                            <h3>인수가능 상품 유형 (바로컨설팅)</h3>
+                        </div>
+                        <ul id="product-list" class="styled-list">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bottom-right">
+                    <!-- Plan Table -->
+                    <div class="card full-height">
+                        <div class="card-header accent">
+                            <span class="material-symbols-outlined">view_list</span>
+                            <h3>AI 설계명세조회</h3>
+                        </div>
+                        <div class="table-container large">
+                            <table class="data-table hoverable">
+                                <thead>
+                                    <tr>
+                                        <th>순번</th>
+                                        <th>사유</th>
+                                        <th>구분</th>
+                                        <th>피보험자</th>
+                                        <th>설계번호</th>
+                                        <th>상품명</th>
+                                        <th>설계일자</th>
+                                        <th>보험료</th>
+                                        <th>배수</th>
+                                        <th>심사결과</th>
+                                        <th>메모</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="plan-tbody">
+                                    <tr class="empty-row"><td colspan="11">AI 설계를 실행해주세요.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button id="btn-compare-plans" class="btn btn-outline">플랜 비교하기</button>
+                <button id="btn-cumulative-sim" class="btn btn-outline">누적시뮬레이션</button>
+                <button id="btn-underwriting-view" class="btn btn-outline">인수심사보기</button>
+                <button id="btn-ai-specs" class="btn btn-outline">AI설계명세</button>
+                <button class="btn btn-primary">발행</button>
+                <button id="btn-memo" class="btn btn-secondary">메모 >></button>
+                <button id="close-btn" class="btn btn-ghost" style="margin-left: auto;">닫기</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 맞춤 AI설계 조건 선택 팝업 -->
+    <div id="custom-design-modal" class="modal">
+        <div class="modal-content custom-design-popup">
+            <div class="custom-design-header">
+                <h2>맞춤AI설계 — 설계 조건을 선택하세요 <span class="header-sub">(선택하신 조건을 반영해서 설계합니다)</span></h2>
+            </div>
+            <div class="custom-design-body">
+                <!-- 상품 구분 -->
+                <div class="cd-column">
+                    <div class="cd-section-title">상품 구분</div>
+                    <div class="cd-section-body">
+                        <label class="cd-radio"><input type="radio" name="product" value="종합보험_표준체" checked> <strong>[ 종합보험 ] 표준체</strong></label>
+                        <label class="cd-radio"><input type="radio" name="product" value="종합보험_유병자"> [ 종합보험 ] 유병자</label>
+                        <label class="cd-radio"><input type="radio" name="product" value="운전자보험"> 운전자보험</label>
+                        <label class="cd-radio"><input type="radio" name="product" value="간병치매보험"> 간병/치매보험</label>
+                        <label class="cd-radio"><input type="radio" name="product" value="치아보험"> 치아보험</label>
+                        <label class="cd-radio"><input type="radio" name="product" value="태아보험"> 태아보험</label>
+                        <div class="cd-sub-group" id="prenatal-options" style="display:none;">
+                            <label class="cd-radio"><input type="radio" name="prenatal_type" value="단태아" checked> 단태아</label>
+                            <label class="cd-radio"><input type="radio" name="prenatal_type" value="다태아"> 다태아</label>
+                            <div class="cd-mini-form">
+                                <label>태명 <input type="text" class="cd-mini-input" placeholder="태명"></label>
+                                <label>출생예정일 <input type="date" class="cd-mini-input"></label>
+                            </div>
+                        </div>
+
+                        <div class="cd-section-title" style="margin-top: 20px;">보험료</div>
+                        <label class="cd-radio"><input type="radio" name="premium" value="헬퍼추천" checked> <strong>헬퍼 추천</strong></label>
+                        <label class="cd-radio"><input type="radio" name="premium" value="5만원이하"> 5만원 이하</label>
+                        <label class="cd-radio"><input type="radio" name="premium" value="5~10만원"> 5~10만원</label>
+                        <label class="cd-radio"><input type="radio" name="premium" value="10~15만원"> 10~15만원</label>
+                        <label class="cd-radio"><input type="radio" name="premium" value="15만원초과"> 15만원 초과</label>
+                    </div>
+                </div>
+
+                <!-- 주요담보 선택 -->
+                <div class="cd-column cd-column-mid">
+                    <div class="cd-section-title">주요담보 선택</div>
+                    <div class="cd-section-body cd-scrollable">
+                        <label class="cd-check highlight-check"><input type="checkbox" name="coverage" value="헬퍼추천" checked> <strong>헬퍼 추천</strong></label>
+
+                        <div class="cd-group-label">■ 암</div>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="암진단비"> 암진단비</label>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="통합암진단비"> 통합암진단비</label>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="암수술비"> 암수술비</label>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="암주요치료비"> 암주요치료비</label>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="고액항암치료비"> 고액항암치료비</label>
+
+                        <div class="cd-group-label">■ 뇌혈관/심혈관</div>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="뇌혈관질환진단비"> 뇌혈관질환진단비</label>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="심혈관질환진단비"> 심혈관질환진단비</label>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="심뇌혈관수술비"> 심뇌혈관 수술비</label>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="심뇌혈관주요치료비"> 심뇌혈관 주요치료비</label>
+
+                        <div class="cd-group-label">■ 간병인일당</div>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="상해간병사용입원일당"> 상해간병사용입원일당</label>
+                        <label class="cd-check"><input type="checkbox" name="coverage" value="질병간병사용입원일당"> 질병간병사용입원일당</label>
+                    </div>
+                </div>
+
+                <!-- 판매 인기담보 TOP 10 -->
+                <div class="cd-column">
+                    <div class="cd-section-title accent-title">판매 인기담보 TOP 10</div>
+                    <div class="cd-section-body">
+                        <p class="cd-star-label" id="popular-label">★ '30대 남자' 고객의 상위10개 질병담보</p>
+                        <div class="cd-popular-list">
+                            <div class="cd-popular-item"><span>1. 질병수술</span><input type="checkbox" name="popular" value="질병수술"></div>
+                            <div class="cd-popular-item"><span>2. 질병입원</span><input type="checkbox" name="popular" value="질병입원"></div>
+                            <div class="cd-popular-item"><span>3. 혈전제거치료비</span><input type="checkbox" name="popular" value="혈전제거치료비"></div>
+                            <div class="cd-popular-item"><span>4. 혈전주요치료비</span><input type="checkbox" name="popular" value="혈전주요치료비"></div>
+                            <div class="cd-popular-item"><span>5. 남성통합암</span><input type="checkbox" name="popular" value="남성통합암"></div>
+                            <div class="cd-popular-item"><span>6. 간병인사용</span><input type="checkbox" name="popular" value="간병인사용"></div>
+                            <div class="cd-popular-item"><span>7. 로봇암수술</span><input type="checkbox" name="popular" value="로봇암수술"></div>
+                            <div class="cd-popular-item"><span>8. 심뇌생활비</span><input type="checkbox" name="popular" value="심뇌생활비"></div>
+                            <div class="cd-popular-item"><span>9. 하이클래스암특정</span><input type="checkbox" name="popular" value="하이클래스암특정"></div>
+                            <div class="cd-popular-item"><span>10. 중입자치료비</span><input type="checkbox" name="popular" value="중입자치료비"></div>
+                        </div>
+                        <div class="cd-bottom-options">
+                            <div class="cd-option-row">
+                                <div class="cd-option-box accent-box">만기</div>
+                                <select class="cd-select"><option>연만기</option><option>80세만기</option><option>90세만기</option><option>100세만기</option></select>
+                            </div>
+                            <div class="cd-option-row">
+                                <div class="cd-option-box">해약환급금</div>
+                                <select class="cd-select"><option>무저해지</option><option>표준해지</option><option>저해지</option></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="custom-design-footer">
+                <button id="cd-submit-btn" class="btn btn-primary">진행</button>
+                <button id="cd-close-btn" class="btn btn-secondary">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 설계 상세 결과 (추천 사유) 팝업 -->
+    <div id="plan-detail-modal" class="modal">
+        <div class="modal-content plan-detail-popup">
+            <div class="plan-detail-top-box">
+                <div class="pd-title">상품명 : <span id="pd-product-name">간편한3.10.10건강보험</span></div>
+                <div class="pd-subtitle">30년납/30년만기 / 연만기 / 해약환급금미지급형</div>
+            </div>
+            
+            <div class="plan-detail-body">
+                <h3 class="pd-reason-title" id="pd-reason-title">[설계 주제] 고객 맞춤 (유사고객)</h3>
+                <p class="pd-desc">고객님의 가입정보를 기반 중 암/뇌/심 중증질환 기왕력 및 다빈도질환 이력이 비슷한 고객님들이 많이 가입한 상품 중 보장 자산이 많이 담긴 설계를 추천 드립니다.</p>
+                <p class="pd-stat" id="pd-stat">대장용종 병력을 가지고 있는 분들의 <strong>50.0%</strong>가 가입 중인 상품입니다.</p>
+                <p class="pd-info" id="pd-sim-wrapper">질병 유사도 : <span id="pd-similarity">88.8%</span></p>
+                <p class="pd-info" id="pd-prev-sim-wrapper">기가입 담보 유사도 : <span id="pd-prev-sim">75.4%</span></p>
+                <p class="pd-info">인수심사결과 : <span id="pd-audit-result">부담보 (직장 2년, 대장2년)</span></p>
+            </div>
+
+            <div class="plan-detail-bottom-box">
+                <div class="pd-summary">
+                    <span>계약번호 : <span id="pd-plan-id">L02608701817</span></span>
+                    <span>납입보험료 : <span id="pd-premium">150,000</span>원</span>
+                </div>
+                <div class="pd-notice">※ 가심사 결과는 참고용이며, 실제 가입 여부 및 조건은 정식 심사 결과에 따라 달라질 수 있습니다.</div>
+            </div>
+
+            <div class="plan-detail-footer">
+                <button id="btn-pd-compare" class="btn btn-outline">플랜 비교하기</button>
+                <button id="btn-sim-view" class="btn btn-primary" style="background: #f58220; border-color: #f58220;">누적시뮬레이션</button>
+                <button id="btn-audit-view" class="btn btn-primary" style="background: #e65c00; border-color: #e65c00;">인수심사보기</button>
+                <button id="pd-close-btn" class="btn btn-secondary" style="background: white; color: #333; border: 1px solid #ccc;">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI 사전심사 결과조회 팝업 -->
+    <div id="audit-modal" class="modal">
+        <div class="modal-content audit-popup">
+            <div class="audit-header">
+                <h2>AI 사전심사 결과조회</h2>
+                <button id="audit-close-btn" class="audit-close">&times;</button>
+            </div>
+            <div class="audit-body">
+                <div class="audit-section-title">※ AI 고지</div>
+                <div class="audit-info-box">
+                    AI고지는 신용정보원 보험금 청구이력 정보를 기반으로, 고객님의 정확한 이재력 고지를 돕는 보조 도구입니다.<br>
+                    AI고지는 신용정보원에 등록되지 않은 정보 등 불러올 수 없는 고지사항도 있기에, 고객님과의 확인 과정은 꼭 필요합니다.
+                </div>
+                <div class="audit-table-wrapper">
+                    <table class="audit-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">병명</th>
+                                <th rowspan="2" width="60">치료일</th>
+                                <th rowspan="2" width="60">경과일</th>
+                                <th colspan="5">치료내용</th>
+                            </tr>
+                            <tr>
+                                <th width="50">치료</th>
+                                <th width="50">투약</th>
+                                <th width="50">입원</th>
+                                <th width="50">수술</th>
+                                <th width="70">정밀검사</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">손목 및 손의 열린 상처</td>
+                                <td>1</td><td>26</td>
+                                <td>☑</td><td>☑</td><td>☑</td><td>☑</td><td>☐</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">결장의 폴립(대장폴립,대장용종)</td>
+                                <td>1</td><td>1146</td>
+                                <td>☑</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">기타 및 상세불명 손목 및 손 부분의 으깸손상</td>
+                                <td>1</td><td>26</td>
+                                <td>☑</td><td>☑</td><td>☐</td><td>☐</td><td>☐</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="audit-section-title" style="margin-top: 24px;">※ AI 사전심사</div>
+                <div class="audit-info-box">
+                    AI 사전심사는 AI 바로고지 질병을 바탕으로 심사결과(승인, 조건부승인, 심사) 안내입니다.<br>
+                    <span class="text-red">AI 사전심사는 참고용이며, 최종 심사결과는 장기심사부 심사 결과에 따라 달라질 수 있습니다.</span>
+                </div>
+                
+                <div class="audit-result-area">
+                    <div class="audit-status-blocks">
+                        <div class="audit-block disabled">승인</div>
+                        <div class="audit-block active-orange">
+                            <div class="audit-block-top">조건부승인</div>
+                            <div class="audit-block-bottom">
+                                <span>할증</span><span class="active-yellow">부담보</span>
+                            </div>
+                        </div>
+                        <div class="audit-block disabled">심사</div>
+                    </div>
+                    
+                    <div class="audit-direct-approve">
+                        바로<br>승인<br>가능
+                    </div>
+                    
+                    <div class="audit-detail-box">
+                        <div class="audit-detail-header">AI 사전심사 부담보 (부위 및 질병)</div>
+                        <div class="audit-detail-content">
+                            <p id="audit-dynamic-result">직장(2년)<br>대장(맹장, 직장 제외)(2년)<br>상,하악골(위턱뼈-아래턱뼈)(2년)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 누적 시뮬레이션 팝업 -->
+    <div id="sim-modal" class="modal">
+        <div class="modal-content sim-popup">
+            <div class="sim-header">
+                <div class="sim-header-left">
+                    <span class="material-symbols-outlined" style="font-size: 16px; margin-right: 6px; color: #d66b15;">analytics</span>
+                    바로추적/조정(LTUJ0037U)
+                </div>
+                <div class="sim-header-right">
+                    <span>─</span>
+                    <span>□</span>
+                    <button id="sim-close-x" class="sim-close-x">&times;</button>
+                </div>
+            </div>
+            
+            <div class="sim-body">
+                <div class="sim-search-bar">
+                    <span class="sim-label">피보험자</span>
+                    <div class="sim-input-wrap">
+                        <input type="text" value="800612-1080911" readonly>
+                        <button class="sim-icon-btn"><span class="material-symbols-outlined" style="font-size: 14px;">search</span></button>
+                    </div>
+                    <span class="sim-label" style="margin-left: 20px;">피보험자명</span>
+                    <input type="text" id="sim-cust-name" value="박세환" class="sim-input-name" readonly>
+                </div>
+
+                <div class="sim-section">
+                    <div class="sim-section-header">
+                        <span class="sim-section-title">▶ 가입계약 현황(설계건 포함)</span>
+                        <div class="sim-right-text">전체 <span>3</span> 건중 <span>3</span> 건 선택</div>
+                    </div>
+                    <table class="sim-table">
+                        <thead>
+                            <tr>
+                                <th width="30">☑</th>
+                                <th width="60">상태</th>
+                                <th width="120">계약번호</th>
+                                <th width="100">관계</th>
+                                <th width="160">보험기간</th>
+                                <th>상품명</th>
+                                <th width="40">급수</th>
+                                <th width="180">직업명</th>
+                                <th width="70">직업코드</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>☑</td>
+                                <td>설계중</td>
+                                <td id="sim-plan-id">L02617597141</td>
+                                <td>주피보험자임</td>
+                                <td>2026-05-08~2080-05-08</td>
+                                <td id="sim-product-name" class="text-left">간편한3.10.10건강보험(세만기형)</td>
+                                <td>3</td>
+                                <td>간판 제작 및 설치원(실외설치)</td>
+                                <td>73041</td>
+                            </tr>
+                            <tr>
+                                <td>☑</td>
+                                <td>유지</td>
+                                <td>L02617598873</td>
+                                <td>주피보험자임</td>
+                                <td>2026-05-08~2046-05-08</td>
+                                <td class="text-left">뉴하이카운전자상해보험(HI2601)</td>
+                                <td>3</td>
+                                <td>간판 제작 및 설치원(실외설치)</td>
+                                <td>73041</td>
+                            </tr>
+                            <tr>
+                                <td>☑</td>
+                                <td>유지</td>
+                                <td>L02613999641</td>
+                                <td>주피보험자임</td>
+                                <td>2026-04-13~2031-04-13</td>
+                                <td class="text-left">성공마스터재산종합보험(HI2601)1종...</td>
+                                <td>3</td>
+                                <td>간판 제작 및 설치원(실외설치)</td>
+                                <td>73041</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="sim-tabs">
+                        <div class="sim-tab active">특인내역</div>
+                        <div class="sim-tab">누적지침룰</div>
+                        <div class="sim-tab">실손지침룰</div>
+                        <div class="sim-tab">정액지침룰</div>
+                    </div>
+                </div>
+
+                <div class="sim-section" style="margin-top: 10px;">
+                    <div class="sim-section-header">
+                        <span class="sim-section-title">▶ 특인내역 조회 <span class="sim-sub-info">[인수지침 해소 대상건수 : 당사 <span class="sim-yellow-badge">12</span> 건, 당/타사 <span class="sim-yellow-badge">0</span> 건]</span></span>
+                        <div class="sim-right-buttons">
+                            <button class="sim-btn">선택 누적계산</button>
+                            <button class="sim-btn sim-btn-orange">전체 누적계산</button>
+                        </div>
+                    </div>
+                    
+                    <div class="sim-table-wrap">
+                        <table class="sim-table">
+                            <thead>
+                                <tr>
+                                    <th>인수지침</th>
+                                    <th>누적구분명</th>
+                                    <th width="100">계약번호</th>
+                                    <th width="50">상태</th>
+                                    <th>가입담보</th>
+                                    <th width="80">반영금액</th>
+                                    <th width="80">한도금액</th>
+                                    <th width="80">가능금액</th>
+                                    <th width="100">수정금액</th>
+                                    <th width="60">자동조정</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="sim-group-title">
+                                    <td colspan="10" class="text-left"><strong>1.[리스크제한자 I (위험직업군)] [누적한도][당사] 교통(운행중)상해경도후유장해 총 보유금액 : 10,000만원, 누적...</strong></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2">교통(운행중)상해경도후유장해(0...</td>
+                                    <td><span class="sim-plan-id-display">L0261759...</span></td>
+                                    <td>설계중</td>
+                                    <td class="text-left">상해후유장해(간편건강고지)담보 (3NB4)</td>
+                                    <td>20,000,000</td>
+                                    <td rowspan="2">20,000,000</td>
+                                    <td rowspan="2">0</td>
+                                    <td><input type="text" class="sim-grid-input" value="20,000,000"></td>
+                                    <td><button class="sim-icon-btn"><span class="material-symbols-outlined" style="font-size: 14px;">edit</span></button></td>
+                                </tr>
+                                <tr>
+                                    <td>L0261759...</td>
+                                    <td>유지</td>
+                                    <td class="text-left">상해후유장해담보 (4381)</td>
+                                    <td>80,000,000</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                                <tr class="sim-group-title">
+                                    <td colspan="10" class="text-left"><strong>2.[리스크제한자 I (위험직업군)] [누적한도][당사] 화재상해경도후유장해 총 보유금액 : 10,000만원, 누적...</strong></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2">화재상해경도후유장해(017)</td>
+                                    <td><span class="sim-plan-id-display">L0261759...</span></td>
+                                    <td>설계중</td>
+                                    <td class="text-left">상해후유장해(간편건강고지)담보 (3NB4)</td>
+                                    <td>20,000,000</td>
+                                    <td rowspan="2">20,000,000</td>
+                                    <td rowspan="2">0</td>
+                                    <td><input type="text" class="sim-grid-input" value="20,000,000"></td>
+                                    <td><button class="sim-icon-btn"><span class="material-symbols-outlined" style="font-size: 14px;">edit</span></button></td>
+                                </tr>
+                                <tr>
+                                    <td>L0261759...</td>
+                                    <td>유지</td>
+                                    <td class="text-left">상해후유장해담보 (4381)</td>
+                                    <td>80,000,000</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="sim-footer-notes">
+                    <p>• 당사 유지계약에 대한 선택계산 및 당일변경분은 <span style="color: #d32f2f;">당타사 누적 추적에 반영되지 않습니다.</span></p>
+                    <p>• 일괄조정/자동조정의 기준은 담보별 CV배수 기준, 높은순부터 가입됩니다.</p>
+                    <p>• 일괄조정/자동조정으로 인하여 가입담보가 <span>배제</span> 될 수 있습니다. <span style="color: #d32f2f;">기본담보 및 필수담보는 0원으로 저장하실 수 없습니다.</span></p>
+                    <p>• 담보별로 <span style="color: #d32f2f;">마지막 수정하신 금액 기준</span> 으로 적용되오니, 가입설계에 참고하시기 바랍니다.</p>
+                </div>
+            </div>
+
+            <div class="sim-footer">
+                <div class="sim-footer-left">
+                    <button class="sim-btn">계약조회</button>
+                    <button class="sim-btn">담보조회</button>
+                    <button class="sim-btn">정액계약상세조회</button>
+                </div>
+                <div class="sim-footer-right">
+                    <button class="sim-btn sim-btn-red">일괄조정</button>
+                    <button class="sim-btn sim-btn-red">저장후닫기</button>
+                    <button id="sim-close-btn" class="sim-btn">X 닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Alerts -->
+    <div id="alert-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="material-symbols-outlined alert-icon">info</span>
+                <h3 id="modal-title">알림</h3>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-close-btn" class="btn btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for 유병자/표준형 Selection -->
+    <div id="type-select-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="material-symbols-outlined alert-icon" style="color: #f58220;">medical_services</span>
+                <h3>설계 유형 선택</h3>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px; color: #666;">가설계 고객의 설계 유형을 선택해주세요.</p>
+                <div class="type-select-buttons">
+                    <button id="type-illness-btn" class="btn btn-type illness">
+                        <span class="material-symbols-outlined">healing</span>
+                        <div>
+                            <strong>유병자</strong>
+                            <small>간편 3.10.10</small>
+                        </div>
+                    </button>
+                    <button id="type-standard-btn" class="btn btn-type standard">
+                        <span class="material-symbols-outlined">verified_user</span>
+                        <div>
+                            <strong>표준형</strong>
+                            <small>퍼펙트 플러스</small>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- 플랜 비교하기 팝업 -->
+    <div id="compare-modal" class="modal">
+        <div class="modal-content compare-popup">
+            <div class="compare-header">
+                <h2>AI 플랜 비교하기</h2>
+                <button id="compare-close-x" class="audit-close">&times;</button>
+            </div>
+            <div class="compare-body">
+                <div class="table-container large" style="margin-top: 10px;">
+                    <table class="data-table compare-table">
+                        <thead id="compare-thead">
+                            <!-- Populated by JS -->
+                        </thead>
+                        <tbody id="compare-tbody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="compare-footer">
+                <button id="compare-close-btn" class="btn btn-secondary">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 기가입 내역 상세 팝업 -->
+    <div id="contract-detail-modal" class="modal">
+        <div class="modal-content contract-detail-popup">
+            <div class="cd-header">
+                <h2><span id="cd-company-name">현대해상</span> 기가입 내역 상세</h2>
+                <button id="cd-modal-close-x" class="audit-close">&times;</button>
+            </div>
+            <div class="cd-body">
+                <div class="cd-list" id="cd-contract-list">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="cd-footer">
+                <button id="cd-modal-close-btn" class="btn btn-secondary">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI설계명세 팝업 -->
+    <div id="ai-specs-modal" class="modal">
+        <div class="modal-content ai-specs-popup">
+            <div class="specs-header-top">
+                <span style="font-weight: bold; font-size: 15px;">AI설계명세</span>
+                <button id="ai-specs-close-x" class="specs-close-x">&times;</button>
+            </div>
+            
+            <div class="specs-filter-area">
+                <div class="specs-filter-row">
+                    <div class="filter-group">
+                        <span class="filter-label">업무구분</span>
+                        <label class="radio-label-inline"><input type="radio" name="work_type" checked> 가입설계</label>
+                        <label class="radio-label-inline"><input type="radio" name="work_type"> 변경설계</label>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">조회구분</span>
+                        <select class="filter-select"><option>피보험자번호</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">번호/명칭</span>
+                        <div class="filter-input-wrap">
+                            <input type="text" class="filter-input-text">
+                            <button class="filter-icon-btn"><span class="material-symbols-outlined" style="font-size: 14px;">search</span></button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="margin-left: auto; background: #e65c00; border: none; padding: 4px 16px;">조회</button>
+                </div>
+                
+                <div class="specs-filter-row" style="margin-top: 4px; padding-top: 4px; border-top: 1px solid #ddd;">
+                    <div class="filter-group">
+                        <span class="filter-label">대상기간</span>
+                        <select class="filter-select"><option>설계보관일</option></select>
+                        <input type="date" value="2026-03-01" class="filter-date-input"> ~
+                        <input type="date" value="2026-03-31" class="filter-date-input">
+                        <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 12px; height: 24px; border-radius: 2px;">전일</button>
+                    </div>
+                    <div class="filter-group" style="margin-left: 10px;">
+                        <span class="filter-label" style="background: #ffe0b2;">상품조회</span>
+                        <input type="text" class="filter-input-text" style="width: 150px;">
+                    </div>
+                    <button class="btn btn-secondary" style="margin-left: auto; padding: 4px 16px; background: #999; color: white; border: none;">초기화</button>
+                </div>
+            </div>
+
+            <div class="specs-table-container">
+                <table class="specs-table">
+                    <thead>
+                        <tr>
+                            <th width="30"><input type="checkbox"></th>
+                            <th width="40">구분 ▼</th>
+                            <th width="40">순번 ▼</th>
+                            <th width="70">피보험자 ▼</th>
+                            <th width="120">주제명 ▼</th>
+                            <th width="110">설계번호 ▼</th>
+                            <th>상품명 ▼</th>
+                            <th width="80">설계일자 ▼</th>
+                            <th width="70">보험료(원) ▼</th>
+                            <th width="60">하이캡<br>배수 ▼</th>
+                            <th width="130">보험기간 ▼</th>
+                            <th width="60">심사결과 ▼</th>
+                            <th width="60">메모 ▼</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ai-specs-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 내 설계 불러오기 팝업 -->
+    <div id="my-plan-modal" class="modal">
+        <div class="modal-content my-plan-popup">
+            <div class="my-plan-header">
+                <h2>내 설계플랜 불러오기 (기존 나의 가입설계명세)</h2>
+                <button id="my-plan-close-x" class="specs-close-x">&times;</button>
+            </div>
+            
+            <div class="my-plan-tabs">
+                <div class="mp-tab">자동차</div>
+                <div class="mp-tab active">장기</div>
+                <div class="mp-tab">일반</div>
+            </div>
+
+            <div class="my-plan-filter-area">
+                <div class="mp-filter-row">
+                    <div class="filter-group">
+                        <span class="filter-label">업무구분</span>
+                        <label class="radio-label-inline"><input type="radio" name="mp_work_type" checked> 가입설계</label>
+                        <label class="radio-label-inline"><input type="radio" name="mp_work_type"> 변경설계</label>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">조회구분</span>
+                        <select class="filter-select"><option>계약담당자</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">사원번호</span>
+                        <div class="filter-input-wrap">
+                            <input type="text" class="filter-input-text" value="1A3085" style="width: 80px;">
+                            <button class="filter-icon-btn"><span class="material-symbols-outlined" style="font-size: 14px;">search</span></button>
+                        </div>
+                        <input type="text" class="filter-input-text" value="이연희" style="width: 80px; margin-left: 5px;">
+                        <input type="text" class="filter-input-text" value="399200" style="width: 80px; margin-left: 5px;">
+                        <input type="text" class="filter-input-text" value="대전TC지점" style="width: 120px; margin-left: 5px;">
+                        <label class="check-label-inline" style="margin-left: 10px;"><input type="checkbox" checked> 사용인포함</label>
+                    </div>
+                </div>
+                
+                <div class="mp-filter-row">
+                    <div class="filter-group">
+                        <span class="filter-label">대상기간</span>
+                        <select class="filter-select"><option>설계보관일</option></select>
+                        <input type="date" value="2026-04-14" class="filter-date-input"> ~
+                        <input type="date" value="2026-04-14" class="filter-date-input">
+                        <div class="filter-btn-group" style="display: flex; gap: 2px;">
+                            <button class="btn-filter-small">오늘</button>
+                            <button class="btn-filter-small">전일</button>
+                            <button class="btn-filter-small">1주일</button>
+                            <button class="btn-filter-small">당월</button>
+                            <button class="btn-filter-small">전월</button>
+                        </div>
+                    </div>
+                    <div class="filter-group" style="margin-left: 20px;">
+                        <span class="filter-label" style="background: #f58220; color: white;">상품조회</span>
+                        <input type="text" class="filter-input-text" style="width: 250px;">
+                    </div>
+                </div>
+
+                <div class="mp-filter-row">
+                    <div class="filter-group">
+                        <span class="filter-label">설계상태</span>
+                        <label class="check-label-inline"><input type="checkbox" checked> 전체</label>
+                        <label class="check-label-inline"><input type="checkbox"> 확정대상</label>
+                        <label class="check-label-inline"><input type="checkbox"> 확정요청</label>
+                        <label class="check-label-inline"><input type="checkbox"> 심사중</label>
+                        <label class="check-label-inline"><input type="checkbox"> 기타설계</label>
+                    </div>
+                    <div class="filter-group" style="margin-left: 20px;">
+                        <span class="filter-label">결과내조회</span>
+                        <select class="filter-select"><option>선택하세요</option></select>
+                        <input type="text" class="filter-input-text" style="width: 150px;">
+                    </div>
+                    <div class="mp-action-btns" style="margin-left: auto; display: flex; gap: 5px;">
+                        <button class="btn-filter-action">초기화</button>
+                        <button class="btn-filter-action orange">조회</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mp-table-container">
+                <table class="mp-table">
+                    <thead>
+                        <tr>
+                            <th width="30"><input type="checkbox"></th>
+                            <th width="200">상품명</th>
+                            <th width="100">설계번호</th>
+                            <th width="70">계약자</th>
+                            <th width="70">피보험자</th>
+                            <th width="90">실손동시<br>가입예정</th>
+                            <th width="70">착한실손</th>
+                            <th width="160">보험기간</th>
+                            <th width="100">설계진행상태</th>
+                            <th width="90">보험료(원)</th>
+                            <th width="60">하이캡<br>배수</th>
+                            <th width="60">스캔여부</th>
+                            <th width="60">완판여부</th>
+                            <th width="60">전자서명</th>
+                            <th width="60">모집저서</th>
+                        </tr>
+                    </thead>
+                    <tbody id="my-plan-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="mp-footer" style="padding: 12px 15px; border-top: 1px solid #ddd; display: flex; justify-content: flex-end; gap: 10px; background: #f9f9f9;">
+                <button id="btn-import-ai-request" class="btn-filter-action orange" style="height: 32px; padding: 0 20px;">AI 설계요청</button>
+                <button class="btn-filter-action" style="height: 32px; padding: 0 20px;" onclick="hideMyPlanModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 추천 설계 불러오기 팝업 -->
+    <div id="recommended-plan-modal" class="modal">
+        <div class="modal-content my-plan-popup">
+            <div class="my-plan-header" style="background: #e65c00;">
+                <h2>추천 설계 불러오기 (지역/사업부)</h2>
+                <button id="recommended-plan-close-x" class="specs-close-x">&times;</button>
+            </div>
+            
+            <div class="my-plan-tabs">
+                <div class="mp-tab active">장기</div>
+                <div class="mp-tab">일반</div>
+            </div>
+
+            <div class="my-plan-filter-area">
+                <div class="mp-filter-row">
+                    <div class="filter-group">
+                        <span class="filter-label">지역단</span>
+                        <select class="filter-select"><option>강남지역단</option><option>서초지역단</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">사업부</span>
+                        <select class="filter-select"><option>강남사업부</option><option>서초사업부</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">지점</span>
+                        <select class="filter-select"><option>양재지점</option><option>서초지점</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">설계사</span>
+                        <input type="text" class="filter-input-text" placeholder="설계사명" style="width: 100px;">
+                    </div>
+                </div>
+                
+                <div class="mp-filter-row">
+                    <div class="filter-group">
+                        <span class="filter-label">대상기간</span>
+                        <select class="filter-select"><option>설계일자</option></select>
+                        <input type="date" value="2026-05-01" class="filter-date-input"> ~
+                        <input type="date" value="2026-05-13" class="filter-date-input">
+                    </div>
+                    <div class="filter-group" style="margin-left: 20px;">
+                        <span class="filter-label">설계주제</span>
+                        <select class="filter-select" style="width: 150px;">
+                            <option>전체</option>
+                            <option>베테랑 설계 따라하기</option>
+                            <option>우리 지점 트렌드</option>
+                            <option>우수 플래너 추천</option>
+                        </select>
+                    </div>
+                    <button class="btn-filter-action orange" style="margin-left: auto;">조회</button>
+                </div>
+            </div>
+
+            <div class="mp-table-container">
+                <table class="mp-table">
+                    <thead>
+                        <tr>
+                            <th width="40">선택</th>
+                            <th width="150">상품명</th>
+                            <th width="100">설계번호</th>
+                            <th width="80">설계자</th>
+                            <th width="100">설계주제</th>
+                            <th width="70">피보험자</th>
+                            <th width="160">보험기간</th>
+                            <th width="90">보험료(원)</th>
+                            <th width="60">하이캡<br>배수</th>
+                            <th>추천사유</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recommended-plan-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="mp-footer" style="padding: 12px 15px; border-top: 1px solid #ddd; display: flex; justify-content: flex-end; gap: 10px; background: #f9f9f9;">
+                <button id="btn-recommended-ai-request" class="btn-filter-action orange" style="height: 32px; padding: 0 20px;">AI 설계요청</button>
+                <button class="btn-filter-action" style="height: 32px; padding: 0 20px;" onclick="hideRecommendedPlanModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- AI 설계 로딩 오버레이 -->
+    <div id="ai-loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <span class="material-symbols-outlined loading-spinner" style="font-size: 48px; color: var(--primary);">hourglass_top</span>
+            <div class="loading-text">AI 설계 진행 중...</div>
+            <div class="loading-subtext">최적의 플랜을 분석하고 있습니다. 잠시만 기다려주세요.</div>
+        </div>
+    </div>
+
+    <!-- AI 설계 결과 상세 팝업 -->
+    <div id="ai-result-modal" class="modal">
+        <div class="modal-content ai-result-popup">
+            <div class="ai-result-header">
+                <h2>4-1. 설계 결과</h2>
+                <button id="ai-result-close-x" class="specs-close-x">&times;</button>
+            </div>
+            
+            <div class="ai-result-main">
+                <!-- Left Sidebar: Options -->
+                <div class="ai-result-left">
+                    <div id="plan-option-1" class="plan-result-card active" onclick="switchResultTab(1)">
+                        <div class="plan-card-header">
+                            I. 고객 맞춤 (유사고객)
+                            <button class="btn-more" onclick="event.stopPropagation(); showPlanDetailByTab(1)">+</button>
+                        </div>
+                        <div class="plan-card-body">
+                            <p class="p-name">간편한3.10.10건강보험(세만기형)</p>
+                            <p class="p-meta">설계번호 : L026 08701817</p>
+                            <p class="p-meta">30년납 / 30년만기 / 연만기 / 해약환급금미지급형</p>
+                            <p class="p-analysis" onclick="event.stopPropagation(); showPlanDetailByTab(1)">기왕력 분석 결과 : 질병유사도 95% / 주요질병 : XX, XX</p>
+                            <div class="p-total">[ 합계보험료 ] 150,000 원</div>
+                        </div>
+                    </div>
+                    <div id="plan-option-2" class="plan-result-card" onclick="switchResultTab(2)">
+                        <div class="plan-card-header">
+                            II. 우수설계 따라하기
+                            <button class="btn-more" onclick="event.stopPropagation(); showPlanDetailByTab(2)">+</button>
+                        </div>
+                        <div class="plan-card-body">
+                            <p class="p-name">내삶엔(3N)맞춤건강보험(세만기형)</p>
+                            <p class="p-meta">설계번호 : L026 10815948</p>
+                            <p class="p-meta">30년납 / 30년만기 / 연만기 / 해약환급금미지급형</p>
+                            <p class="p-analysis" onclick="event.stopPropagation(); showPlanDetailByTab(2)">설계성향 분석 결과 : 설계유사도 88% / 주요담보 : XX, XX</p>
+                            <div class="p-total">[ 합계보험료 ] 100,000 원</div>
+                        </div>
+                    </div>
+                    <div id="plan-option-3" class="plan-result-card" onclick="switchResultTab(3)">
+                        <div class="plan-card-header">
+                            III. 최신트렌드
+                            <button class="btn-more" onclick="event.stopPropagation(); showPlanDetailByTab(3)">+</button>
+                        </div>
+                        <div class="plan-card-body">
+                            <p class="p-name">내삶엔(3N)맞춤건강보험(세만기형)</p>
+                            <p class="p-meta">설계번호 : L026 11250053</p>
+                            <p class="p-meta">30년납 / 30년만기 / 연만기 / 해약환급금미지급형</p>
+                            <p class="p-analysis" onclick="event.stopPropagation(); showPlanDetailByTab(3)">설계성향 분석 결과 : 설계유사도 92% / 주요담보 : XX, XX</p>
+                            <div class="p-total">[ 합계보험료 ] 70,000 원</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Details -->
+                <div class="ai-result-right">
+                    <div class="detail-top-info">
+                        <p class="detail-prod-name">상품명 : <span id="detail-prod-name-span">간편한3.10.10건강보험(세만기형)(Hi2601)(간편건강고지)</span></p>
+                        <p class="detail-prod-meta">30년납 / 30년만기 / 연만기 / 해약환급금미지급형</p>
+                    </div>
+                    
+                    <div class="detail-table-container">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th width="40">구분</th>
+                                    <th>담보명</th>
+                                    <th width="100">납기/만기</th>
+                                    <th width="90">가입금액(만원)</th>
+                                    <th width="80">보험료(원)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detail-coverage-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="detail-bottom-summary">
+                        <div class="detail-summary-item">계약번호 : <span id="detail-plan-id">L026 08701817</span></div>
+                        <div class="detail-summary-item highlight">납입보험료 : <span id="detail-premium">150,000</span> 원</div>
+                    </div>
+                    <p class="detail-footer-note">※ 가심사 결과는 참고용이며, 실제 가입 여부 및 조건은 정식 심사 결과에 따라 달라질 수 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="ai-result-footer">
+                <button class="btn btn-primary" style="background: #233b69;" onclick="showCompareModal()">플랜 비교하기</button>
+                <button class="btn btn-primary" style="background: #f58220;" onclick="showSimModal()">누적시뮬레이션</button>
+                <button class="btn btn-primary" style="background: #f58220;" onclick="showAuditModal()">인수심사보기</button>
+                <button id="ai-result-close-btn" class="btn btn-secondary">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 신규고객입력 팝업 -->
+    <div id="new-customer-modal" class="modal">
+        <div class="modal-content nc-popup">
+            <div class="nc-header">
+                <h2>고객정보 등록/수정</h2>
+                <button class="nc-close-x" onclick="hideNewCustomerModal()">&times;</button>
+            </div>
+            
+            <div class="nc-body">
+                <!-- 상단 검색바 -->
+                <div class="nc-search-row">
+                    <div class="nc-label">고객검색</div>
+                    <select class="nc-select w-100"><option>주민번호</option></select>
+                    <input type="text" class="nc-input w-200" placeholder="주민번호">
+                    <button class="nc-btn-action">신분증 진위확인</button>
+                    <button class="nc-btn-search">조회</button>
+                </div>
+
+                <!-- 기본 정보 그리드 -->
+                <div class="nc-form-grid">
+                    <div class="nc-field"><label>국적</label><div class="nc-input-with-btn"><input type="text" value="대한민국"><button>🔍</button></div></div>
+                    <div class="nc-field"><label>구분</label><select><option>주민등록번호</option></select></div>
+                    <div class="nc-field"><label>고객명</label><input type="text"></div>
+                    <div class="nc-field"><label>만</label><input type="text" class="w-40" value="33"><span>세</span></div>
+                    <div class="nc-field"><label>영문명</label><input type="text"></div>
+                    <div class="nc-field"><label>생년월일</label><input type="text" value="1991-01-01"></div>
+                </div>
+
+                <!-- 주소 및 연락처 섹션 -->
+                <div class="nc-two-column">
+                    <div class="nc-col">
+                        <div class="nc-section-title">주소</div>
+                        <table class="nc-data-table">
+                            <thead><tr><th>구분</th><th>주소</th></tr></thead>
+                            <tbody>
+                                <tr><td>자택</td><td><div class="nc-addr-box"><input type="text" class="w-60" value="우"><input type="text" class="w-full"></div></td></tr>
+                                <tr><td>직장</td><td><div class="nc-addr-box"><input type="text" class="w-60" value="우"><input type="text" class="w-full"></div></td></tr>
+                                <tr><td>기타</td><td><div class="nc-addr-box"><input type="text" class="w-60" value="우"><input type="text" class="w-full"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="nc-col">
+                        <div class="nc-section-title">연락처</div>
+                        <table class="nc-data-table">
+                            <thead><tr><th>구분</th><th>연락처</th><th>통신사</th></tr></thead>
+                            <tbody>
+                                <tr><td>휴대폰1</td><td><select class="w-60"><option>선택</option></select><input type="text" class="w-60"><input type="text" class="w-60"></td><td><select class="w-60"><option>선택</option></select></td></tr>
+                                <tr><td>자택</td><td><select class="w-60"><option>선택</option></select><input type="text" class="w-60"><input type="text" class="w-60"></td><td></td></tr>
+                                <tr><td>이메일</td><td colspan="2"><input type="text" class="w-100"> @ <input type="text" class="w-80"> <select class="w-80"><option>선택</option></select></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 동의 및 추가정보 섹션 -->
+                <div class="nc-two-column mt-15">
+                    <div class="nc-col">
+                        <div class="nc-section-title">개인(신용)정보처리동의</div>
+                        <table class="nc-data-table nc-condensed">
+                            <tr><td width="80">상품소개</td><td>동의일자 <input type="text" class="w-80"></td><td>만료일자 <input type="text" class="w-80"></td></tr>
+                            <tr><td>수신거부</td><td colspan="2" class="nc-check-group"><input type="checkbox"> 전화 <input type="checkbox"> 문자 <input type="checkbox"> 이메일 <input type="checkbox"> 우편</td></tr>
+                            <tr><td>가입설계</td><td>동의일자 <input type="text" class="w-80"></td><td>만료일자 <input type="text" class="w-80"></td></tr>
+                        </table>
+                    </div>
+                    <div class="nc-col">
+                        <div class="nc-section-title">추가정보</div>
+                        <div class="nc-add-info">
+                            <div class="nc-field"><label>직업</label><div class="nc-input-with-btn"><input type="text"><button>🔍</button></div><input type="text" class="w-40" value="1"><span class="ml-5">급</span></div>
+                            <div class="nc-field mt-10"><label>취득경로</label><select class="w-150"><option>선택</option></select></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 기타 메모 -->
+                <div class="nc-memo-section mt-15">
+                    <div class="nc-section-title">기타메모</div>
+                    <textarea class="nc-textarea" placeholder="기타메모는 입력자 본인만 볼 수 있는 메모로, 전사 메모공유는 상단 '고객응대/메모등록'에 입력해야 합니다."></textarea>
+                </div>
+            </div>
+
+            <div class="nc-footer">
+                <div class="nc-footer-left">
+                    <button class="nc-btn-outline">우편물수령지변경</button>
+                    <button class="nc-btn-outline">고객통합조회</button>
+                </div>
+                <div class="nc-footer-right">
+                    <button class="nc-btn-gray">초기화</button>
+                    <button class="nc-btn-orange">저장</button>
+                    <button class="nc-btn-dark" onclick="hideNewCustomerModal()">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 가입설계동의 팝업 (셀프등록 버전) -->
+    <div id="consent-modal" class="modal">
+        <div class="modal-content sc-popup">
+            <div class="sc-header">
+                <div class="sc-tabs">
+                    <div class="sc-tab active">셀프등록</div>
+                    <div class="sc-tab">휴대폰인증</div>
+                    <div class="sc-tab">인터넷동의</div>
+                    <div class="sc-tab">동의서발행</div>
+                </div>
+                <button class="sc-close-x" onclick="hideConsentModal()">&times;</button>
+            </div>
+            
+            <div class="sc-body">
+                <div class="sc-title">
+                    ▶ 셀프등록 <span class="sc-highlight">※ 고객이 주소등록까지 완료해야 고객정보 자동등록</span>
+                </div>
+
+                <table class="sc-form-table">
+                    <tr>
+                        <th width="120">계약담당자</th>
+                        <td>
+                            <div class="sc-input-group">
+                                <input type="text" value="1A3085" class="w-80">
+                                <button class="sc-icon-btn">🔍</button>
+                                <input type="text" value="이먼치" class="w-100">
+                                <input type="text" value="대전TC지점" class="w-150">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>선택</th>
+                        <td>
+                            <label class="sc-radio"><input type="radio" name="sc-send"> 담당에게 보내기(URL 전달용)</label>
+                            <label class="sc-radio ml-20"><input type="radio" name="sc-send" checked> 고객에게 보내기(1명 전달용)</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>휴대폰번호</th>
+                        <td><input type="text" class="nc-input w-200"></td>
+                    </tr>
+                    <tr>
+                        <th>주민번호</th>
+                        <td>
+                            <div class="sc-input-group">
+                                <input type="text" value="741120-2845611" class="nc-input w-150">
+                                <input type="text" class="nc-input w-100">
+                                <span class="ml-10">51 세</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="sc-notice-box">
+                    <div class="sc-notice-title">① 유의사항</div>
+                    <ul class="sc-notice-list">
+                        <li>본인 명의 휴대폰만 업무처리 가능합니다. (타명의, 미성년자, 외국인 처리 불가)
+                            <br><span class="sc-red">※ 내국인&본인명의 외 고객은 기존 방식(휴대폰인증, 동의서발행 등)으로 처리하시기 바랍니다.</span>
+                        </li>
+                        <li class="sc-orange-text">담당에게 보내기(URL전달용)</li>
+                        <li class="sc-gray-text">- 계약담당으로 설정된 사번의 인사정보상 등록된 연락처로 URL 발송
+                            <br>해당 URL을 다수의 타인에게 전달하여 현대해상의 가입설계동의 및 고객정보 등록처리가 가능합니다.
+                            <br><span class="sc-red">※ 해당 URL은 카카오앱 특성상 따른 문제로 아이폰만 카카오인증 가능합니다(안드로이드 불가)</span>
+                        </li>
+                        <li class="sc-orange-text">고객에게 보내기(1명 전달용)</li>
+                        <li class="sc-gray-text">- 기존 프로세스와 동일하게 한명 특정 고객에게만 발송되는 URL입니다.</li>
+                        <li class="sc-red">※ 발송 전 고객에게 충분한 사전안내 후 업무 진행 하시기 바랍니다.
+                            <br>개인정보처리 관련 민원 발생시 관련 법령에 따라 처벌 및 제재 가능 (개인정보보호법 및 신용정보법)
+                        </li>
+                        <li class="sc-gray-text">- 고객 본인이 직접 가입설계동의 및 정보를 등록할 수 있는 URL을 보내는 화면입니다.</li>
+                        <li class="sc-gray-text">- <span class="sc-orange-text">"셀프등록요청"</span> 버튼 클릭시 입력한 휴대폰번호로 URL이 발송됩니다.</li>
+                        <li class="sc-gray-text">- 카카오 회원이 아닐 경우 문자로 대체 발송되며, 등록 완료시 계약담당자에게 알림(PUSH) 발송됩니다.</li>
+                    </ul>
+                    <div class="sc-step-info">
+                        업무처리 순서<br>
+                        휴대폰본인인증 > 가입설계동의 체크 > 주소등록 (모든 단계가 끝나야 정상 동의 및 정보 등록완료)
+                    </div>
+                </div>
+            </div>
+
+            <div class="sc-footer">
+                <button class="nc-btn-outline">휴대폰 인증내역</button>
+                <div class="sc-footer-right">
+                    <button class="nc-btn-orange">셀프등록요청</button>
+                    <button class="nc-btn-gray" onclick="hideConsentModal()">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 출력하기 팝업 -->
+    <div id="print-modal" class="modal">
+        <div class="print-modal-content">
+            <div class="pm-header">
+                <h2 class="pm-title">행복보장분석 출력</h2>
+                <button class="pm-close-btn" onclick="hidePrintModal()">&times;</button>
+            </div>
+            
+            <div class="pm-subheader">
+                <h3 class="pm-subtitle">출력 양식 선택</h3>
+                <div class="pm-actions">
+                    <button class="pm-btn blue">모바일발송</button>
+                    <button class="pm-btn blue">메일발송</button>
+                    <button class="pm-btn blue">출력</button>
+                </div>
+            </div>
+            
+            <div class="pm-body">
+                <div class="pm-left">
+                    <div class="pm-left-box">
+                        <span class="material-symbols-outlined" style="font-size: 32px; color: #3b82f6;">assignment_turned_in</span>
+                        <span style="font-size: 13px; font-weight: 600; color: #3b82f6;">전체선택</span>
+                    </div>
+                    <button class="pm-left-btn">MY출력</button>
+                    <button class="pm-left-btn">MY출력저장</button>
+                </div>
+                
+                <div class="pm-right">
+                    <table class="pm-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">표지</th>
+                                <th style="width: 25%;"><label class="pm-checkbox-label" style="justify-content: center;"><input type="checkbox"> 컨설팅 전 보장분석</label></th>
+                                <th style="width: 25%;"><label class="pm-checkbox-label" style="justify-content: center;"><input type="checkbox"> 컨설팅 후 보장현황</label></th>
+                                <th style="width: 35%;"><label class="pm-checkbox-label" style="justify-content: center;"><input type="checkbox" checked> 상품가입내역</label></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <button class="pm-theme-btn orange">주황테마</button>
+                                    <button class="pm-theme-btn navy">남색테마</button>
+                                </td>
+                                <td>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 보험가입 현황 (총괄)</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 보험가입 현황 (건별)</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 종합보장 요약(도넛형 차트)</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 종합보장 요약(방사형 차트)</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 담보별 보장</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 상품별 보장</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 질환별 보장(암)</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 질환별 보장(뇌혈관질환)</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 질환별 보장(심장질환)</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 질환별 보장(의료비,상해)</label>
+                                </td>
+                                <td>
+                                    <label class="pm-checkbox-label"><input type="checkbox" checked> 담보별 보장</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 종합보장 요약</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox"> 컨설팅 제안</label>
+                                    
+                                    <div style="background: #f8fafc; padding: 10px; margin: 15px -12px 10px; font-weight: 600; font-size: 13px; text-align: center; color: #475569; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+                                        제안서 산출기준
+                                    </div>
+                                    <label class="pm-checkbox-label"><input type="checkbox" checked> 제안서산출기준</label>
+                                    <label class="pm-checkbox-label"><input type="checkbox" checked> 공동안내</label>
+                                </td>
+                                <td>
+                                    <div style="max-height: 250px; overflow-y: auto; padding-right: 5px;">
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 현대단단체상해보험(직급전용)</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 무배당현대해상간편한3.10.10건...</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 무배당현대해상마음을더하는케어...</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 무배당현대해상간편한3.10.10건...</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 연금저축손해보험노후웰스보험(Hi...</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 참좋은운전자+보험2006</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 내생애든든종합보험1401</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 우체국건강보험(만기환급형)</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 무배당알파PLUS보장보험(II)0910</label>
+                                        <label class="pm-checkbox-label"><input type="checkbox" checked> 무배당원스톱3대질병보험(갱신형)</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="pm-footer-box">
+                <div class="pm-footer-header">
+                    <h3>핵심분석</h3>
+                    <span class="pm-badge-green">PC 전용</span>
+                    <span class="pm-footer-desc">보험가입 현황 및 요약, 담보별 보장 출력</span>
+                    <span class="material-symbols-outlined" style="color: #64748b;">expand_more</span>
+                </div>
+                <div style="border-top: 1px solid #e2e8f0; margin: 0 -16px;"></div>
+                <div class="pm-notes">
+                    • 모바일 발송은 카카오톡 알림톡으로 발송됩니다.(알림톡 수신 실패시 LMS 문자로 전환 발송)<br>
+                    • 간편분석과 종합분석 리포트만 모바일 발송이 가능합니다.(핵심분석은 특정 담보에 대한 핵심 보장분석 결과로 출력하여 상담용으로 활용 바랍니다.)
+                </div>
+            </div>
+            
+            <div class="pm-bottom-actions">
+                <button class="pm-btn" style="background: white; border: 1px solid #cbd5e1; color: #475569;" onclick="hidePrintModal()">X 닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메모 팝업 -->
+    <div id="memo-modal" class="modal">
+        <div class="memo-modal-content">
+            <div class="memo-modal-header">
+                <h2>
+                    <span class="material-symbols-outlined">edit_note</span>
+                    메모 작성
+                </h2>
+                <button class="memo-close-btn" onclick="hideMemoModal()">&times;</button>
+            </div>
+            <div class="memo-modal-body">
+                <div class="memo-plan-info">
+                    <div class="memo-info-row">
+                        <span class="memo-label">설계번호</span>
+                        <span id="memo-plan-id" class="memo-value">-</span>
+                    </div>
+                    <div class="memo-info-row">
+                        <span class="memo-label">상품명</span>
+                        <span id="memo-product-name" class="memo-value">-</span>
+                    </div>
+                    <div class="memo-info-row">
+                        <span class="memo-label">사유</span>
+                        <span id="memo-reason" class="memo-value">-</span>
+                    </div>
+                </div>
+                <div class="memo-textarea-wrapper">
+                    <label for="memo-text">메모 내용</label>
+                    <textarea id="memo-text" class="memo-textarea" placeholder="해당 설계에 대한 메모를 입력하세요..." maxlength="300"></textarea>
+                    <div class="memo-char-count"><span id="memo-char-current">0</span> / 300</div>
+                </div>
+            </div>
+            <div class="memo-modal-footer">
+                <button class="btn btn-secondary" onclick="hideMemoModal()">취소</button>
+                <button class="btn btn-primary" onclick="saveMemo()">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">save</span>
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
