@@ -1082,7 +1082,6 @@ function showRecommendedPlanModal() {
             <td>${item.period}</td>
             <td style="text-align: right; padding-right: 8px;">${item.premium}</td>
             <td>22.4</td>
-            <td class="text-left" style="color: #666;">${item.reason}</td>
         `;
         tbody.appendChild(tr);
     });
