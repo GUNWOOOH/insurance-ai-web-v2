@@ -481,6 +481,7 @@ function renderPlans(plans) {
         
         let html = '';
         plan.forEach((item, pIdx) => {
+            if (pIdx >= 11) return; // Skip metadata columns (like detailed reason)
             if (pIdx === 9) {
                 let color = '#28a745';
                 if (item.includes('부담보') || item.includes('할증')) color = '#dc3545';
