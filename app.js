@@ -340,7 +340,7 @@ function populateCustomer(customer) {
     // 실손보험 가입 이력 추출
     const silsonHistory = customer.history.find(h => h[1].includes("실손보험"));
     if (silsonHistory) {
-        infoHtml += `<br><span style="color: #d32f2f; font-weight: 600;">실손보험 가입 이력 : ${silsonHistory[1].replace("실손보험 가입", "") || "-"} (4세대)</span>`;
+        infoHtml += `<br><span style="color: #d32f2f; font-weight: 600; display: inline-flex; align-items: center;">실손보험 가입 이력 : ${silsonHistory[1].replace("실손보험 가입", "") || "-"} (4세대) <button class="silson-btn-action" onclick="showSilsonModal()">실손</button></span>`;
     }
 
     if (!isPreliminary) {
@@ -798,6 +798,207 @@ function showCompareModal() {
     // Build thead
     let trHead = `<tr><th style="width:${100/(plans.length+1)}%;">구분 (담보명)</th>`;
     plans.forEach((plan, idx) => {
+        trHead += `<th>Plan ${idx+1}<br><span style="font-size:11px; font-weight:normal;">${plan[5]}</span><br><span style="font-size:11px; color:#f58220;">${plan[7]}원</span></th>`;
+    });
+    trHead += '</tr>';
+    thead.innerHTML = trHead;
+
+    // Build tbody
+    const coverages = ["일반상해사망", "일반상해후유장해", "질병사망", "질병후유장해(80%이상)", "암진단(유사암제외)", "유사암진단", "뇌혈관질환진단", "허혈성심장질환진단", "상해입원일당", "질병입원일당"];
+    let trBody = '';
+    coverages.forEach((cov, cIdx) => {
+        trBody += `<tr><td style="font-weight:600; background:#f9f9f9;">${cov}</td>`;
+        plans.forEach((plan, pIdx) => {
+            // Mock random coverage amounts
+            const amt = Math.floor(Math.random() * 5000) + 1000;
+            trBody += `<td>${amt.toLocaleString()}만원</td>`;
+        });
+        trBody += '</tr>';
+    });
+    tbody.innerHTML = trBody;
+
+    document.getElementById('compare-modal').classList.add('show');
+}
+
+function hideCompareModal() {
+    document.getElementById('compare-modal').classList.remove('show');
+}
+
+function showContractDetailModal(company) {
+    document.getElementById('cd-company-name').textContent = company;
+    const listEl = document.getElementById('cd-contract-list');
+    listEl.innerHTML = '';
+    
+    // Mock Data
+    const contracts = [
+        { name: "무배당퍼펙트클래스종합보험", status: "정상", date: "2018.05.10" },
+        { name: "무배당계속받는암보험", status: "정상", date: "2020.11.22" },
+        { name: "무배당굿앤굿어린이종합보험", status: "실효", date: "2015.03.15" }
+    ];
+    
+    contracts.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'cd-item';
+        item.innerHTML = `
+            <div class="cd-item-title">${c.name}</div>
+            <div class="cd-item-meta">상태: <span style="color: ${c.status === '정상' ? '#28a745' : '#dc3545'}; font-weight:600;">${c.status}</span> | 가입일: ${c.date}</div>
+        `;
+        listEl.appendChild(item);
+    });
+    
+    document.getElementById('contract-detail-modal').classList.add('show');
+}
+
+function hideContractDetailModal() {
+    document.getElementById('contract-detail-modal').classList.remove('show');
+}
+
+function showAiSpecsModal() {
+    document.getElementById('ai-specs-modal').classList.add('show');
+}
+
+function hideAiSpecsModal() {
+    document.getElementById('ai-specs-modal').classList.remove('show');
+}
+
+function showMyPlanModal() {
+    document.getElementById('my-plan-modal').classList.add('show');
+}
+
+function hideMyPlanModal() {
+    document.getElementById('my-plan-modal').classList.remove('show');
+}
+
+function showRecommendedPlanModal() {
+    document.getElementById('recommended-plan-modal').classList.add('show');
+}
+
+function hideRecommendedPlanModal() {
+    document.getElementById('recommended-plan-modal').classList.remove('show');
+}
+
+function hideAiResultModal() {
+    document.getElementById('ai-result-modal').classList.remove('show');
+}
+
+function handleImportAiRequest() {
+    hideMyPlanModal();
+    const typeRadio = document.querySelector('input[name="import_type"]:checked');
+    if (typeRadio && typeRadio.value === '내 설계 불러오기') {
+        const myPlanTbody = document.getElementById('my-plan-tbody');
+        const checkedBox = myPlanTbody.querySelector('input[type="checkbox"]:checked');
+        
+        if (checkedBox) {
+            const row = checkedBox.closest('tr');
+            const targetProdName = row.cells[1].innerText.trim();
+            
+            // Check if standard or simplified
+            if (targetProdName.includes('간편')) {
+                generatePreliminaryPlans('유병자');
+            } else {
+                generatePreliminaryPlans('표준형');
+            }
+        } else {
+            showAlert("안내", "내 설계 불러오기 목록에서 대상을 1개 선택해주세요.");
+        }
+    }
+}
+
+function handleRecommendedAiRequest() {
+    hideRecommendedPlanModal();
+    const typeRadio = document.querySelector('input[name="import_type"]:checked');
+    if (typeRadio && typeRadio.value === '추천설계 불러오기') {
+        const recTbody = document.getElementById('recommended-plan-tbody');
+        const checkedBox = recTbody.querySelector('input[type="checkbox"]:checked');
+        
+        if (checkedBox) {
+            const row = checkedBox.closest('tr');
+            const targetProdName = row.cells[1].innerText.trim();
+            
+            if (targetProdName.includes('간편')) {
+                generatePreliminaryPlans('유병자');
+            } else {
+                generatePreliminaryPlans('표준형');
+            }
+        } else {
+            showAlert("안내", "추천 설계 불러오기 목록에서 대상을 1개 선택해주세요.");
+        }
+    }
+}
+
+function showNewCustomerModal() {
+    document.getElementById('new-customer-modal').classList.add('show');
+}
+
+function hideNewCustomerModal() {
+    document.getElementById('new-customer-modal').classList.remove('show');
+}
+
+function showConsentModal() {
+    document.getElementById('consent-modal').classList.add('show');
+}
+
+function hideConsentModal() {
+    document.getElementById('consent-modal').classList.remove('show');
+}
+
+function showPrintModal() {
+    document.getElementById('print-modal').classList.add('show');
+}
+
+function hidePrintModal() {
+    document.getElementById('print-modal').classList.remove('show');
+}
+
+function showMemoModal() {
+    if (!window.selectedPlanIndices || window.selectedPlanIndices.length === 0) {
+        showAlert("안내", "먼저 목록에서 설계를 선택해주세요.");
+        return;
+    }
+    const plan = currentCustomer.plans[window.selectedPlanIndices[0]];
+    openMemoForPlan(window.selectedPlanIndices[0], plan);
+}
+
+function openMemoForPlan(planIdx, planObj) {
+    let plan = planObj;
+    if (!plan && currentCustomer && currentCustomer.plans) {
+        plan = currentCustomer.plans[planIdx];
+    }
+    
+    if (!plan) return;
+
+    window.currentMemoPlanIdx = planIdx;
+    document.getElementById('memo-plan-id').textContent = plan[4];
+    document.getElementById('memo-product-name').textContent = plan[5];
+    document.getElementById('memo-reason').textContent = plan[1];
+    
+    const memoTextEl = document.getElementById('memo-text');
+    memoTextEl.value = plan[10] || '';
+    document.getElementById('memo-char-current').textContent = memoTextEl.value.length;
+    
+    document.getElementById('memo-modal').classList.add('show');
+}
+
+function hideMemoModal() {
+    document.getElementById('memo-modal').classList.remove('show');
+}
+
+function saveMemo() {
+    const memoText = document.getElementById('memo-text').value.trim();
+    if (window.currentMemoPlanIdx !== undefined && currentCustomer && currentCustomer.plans) {
+        currentCustomer.plans[window.currentMemoPlanIdx][10] = memoText;
+        renderPlans(currentCustomer.plans);
+    }
+    hideMemoModal();
+}
+
+function showSilsonModal() {
+    document.getElementById('silson-modal').classList.add('show');
+}
+
+function hideSilsonModal() {
+    document.getElementById('silson-modal').classList.remove('show');
+}
         const planId = plan[4];
         const productName = plan[5];
         trHead += `
