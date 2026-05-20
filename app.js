@@ -681,7 +681,7 @@ function showPlanDetail(plan) {
 
         if (reasonType === "고객 개인화 추천") {
             titleEl.textContent = "[설계 주제] 고객 맞춤 (유사고객)";
-            statEl.innerHTML = "대장용종 병력을 가지고 있는 분들의 <strong>50.0%</strong>가 가입 중인 상품입니다.";
+            statEl.innerHTML = "대장용종 병력을 가지고 있는 분들의 <strong>50.0%</strong>가 가입 중인 상품입니다.<br><span style='color: #e65c00; font-weight: bold; font-size: 11px; display: inline-block; margin-top: 4px;'>* 기왕력(질병이력)과 기가입 보험 분석을 모두 고려한 맞춤 설계안입니다.</span>";
             simEl.textContent = "88.8%";
             prevSimEl.textContent = "75.4%";
         } else if (reasonType === "베테랑 설계 따라하기") {
