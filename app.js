@@ -1281,3 +1281,11 @@ function saveMemo() {
     hideMemoModal();
     showAlert("저장 완료", "메모가 저장되었습니다.");
 }
+
+function showSilsonModal() {
+    document.getElementById('silson-modal').classList.add('show');
+}
+
+function hideSilsonModal() {
+    document.getElementById('silson-modal').classList.remove('show');
+}
