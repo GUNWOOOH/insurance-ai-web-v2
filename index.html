@@ -1465,8 +1465,133 @@
                 <h2>실손의료비 변천사</h2>
                 <button class="specs-close-x" style="color:white; border:none; background:transparent; font-size:24px; cursor:pointer;" onclick="hideSilsonModal()">&times;</button>
             </div>
-            <div class="silson-modal-body" style="padding: 0; background-color: #f4f6f9;">
-                <img src="images/silson_history.png" alt="실손의료비 변천사" style="width: 100%; height: auto; display: block; border-radius: 0 0 8px 8px;">
+            <div class="silson-modal-body">
+                <table class="silson-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="gen-1" width="6%">구분</th>
+                            <th rowspan="2" class="gen-1" width="10%"></th>
+                            <th class="gen-1" width="12%">1세대</th>
+                            <th colspan="4" class="gen-2">2세대</th>
+                            <th class="gen-3" width="12%">3세대</th>
+                            <th class="gen-4" width="12%">4세대</th>
+                            <th class="gen-5 gen-5-top" width="16%">5세대</th>
+                        </tr>
+                        <tr>
+                            <th class="gen-1">표준화 이전</th>
+                            <th class="gen-2">표준화</th>
+                            <th class="gen-2">1차개정</th>
+                            <th class="gen-2">2차개정</th>
+                            <th class="gen-2">3차개정</th>
+                            <th class="gen-3">착한실손<br>(1804부터 단독)</th>
+                            <th class="gen-4">비급여할증제</th>
+                            <th class="gen-5">비급여 중증/비중증</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 판매시기 -->
+                        <tr>
+                            <td rowspan="6" class="gen-1" style="writing-mode: vertical-lr; text-orientation: upright; letter-spacing: 5px; font-weight: bold;">공통사항</td>
+                            <td class="gen-1" style="font-weight: bold;">판매시기</td>
+                            <td class="gen-1">~0504<br>0505~0903<br>0904~0907</td>
+                            <td class="gen-2">0908~1303</td>
+                            <td class="gen-2">1304~1508</td>
+                            <td class="gen-2">1509~1512</td>
+                            <td class="gen-2">1601~1703</td>
+                            <td class="gen-3">1704~2106</td>
+                            <td class="gen-4">2107~2603</td>
+                            <td class="gen-5">2604~</td>
+                        </tr>
+                        <!-- 담보구성 -->
+                        <tr>
+                            <td class="gen-1" style="font-weight: bold;">담보구성</td>
+                            <td class="gen-1">상해입원, 상해통원,<br>질병입원, 질병통원,<br>일반상해의료비</td>
+                            <td colspan="4" class="gen-2">상해입원, 상해통원, 질병입원, 질병통원</td>
+                            <td class="gen-3">상해입원, 상해통원, 질병입원, 질병통원</td>
+                            <td class="gen-4">상해급여, 상해비급여,<br>질병급여, 질병비급여</td>
+                            <td class="gen-5">상해급여, 질병급여<br>상해비급여(중증/비중증)<br>질병비급여(중증/비중증)</td>
+                        </tr>
+                        <!-- 가입금액 -->
+                        <tr>
+                            <td class="gen-1" style="font-weight: bold;">가입금액</td>
+                            <td class="gen-1">입원:3천,5천,1억<br>(0809부터)<br>통원:10~30만</td>
+                            <td colspan="5" class="gen-2">입원 : 5천<br>통원 30만(25만/5만, 20만/10만)</td>
+                            <td class="gen-4">급여,비급여 각 5천<br>(통원 회당 20만 포함)</td>
+                            <td class="gen-5">급여, 비급여 각 5천<br>(통원 회당 20만 포함)<br>*비급여 비중증 1천<br>(통원 일당 20만 포함)</td>
+                        </tr>
+                        <!-- 보장기간 -->
+                        <tr>
+                            <td class="gen-1" style="font-weight: bold;">보장기간</td>
+                            <td class="gen-1">사고일로부터 365일<br>(통원30회한, 일반상해의료비 180일)</td>
+                            <td colspan="2" class="gen-2">입원 : 입원일로부터 365일<br>통원 : 계약일기준 연간 180회</td>
+                            <td colspan="3" class="gen-2">입원 : 가입금액 소진시까지<br>입원가능, 기간 무관<br>통원 : 계약일기준 연간 180회</td>
+                            <td class="gen-4">계약일 기준<br>매년 가입금액 한도</td>
+                            <td class="gen-5">계약일 기준<br>매년 가입금액 한도</td>
+                        </tr>
+                        <!-- 면책기간 -->
+                        <tr>
+                            <td class="gen-1" style="font-weight: bold;">면책기간</td>
+                            <td class="gen-1 highlight-red">상해 : 재보장 없음<br>질병 : 180일</td>
+                            <td colspan="2" class="gen-2">입원 : <span class="highlight-red">90일 면책기간</span> 경과 후 재 보장<br>(1404부터 퇴원후 180일 지나면 다시 365일)</td>
+                            <td colspan="3" class="gen-2">입원기간 275일 이상시 <span class="highlight-red">90일 면책</span><br>입원기간 275일 미만시 <span class="highlight-red">365일까지 면책</span></td>
+                            <td class="gen-4">한도 소진시 다음 계약일</td>
+                            <td class="gen-5">한도 소진시 다음 계약일</td>
+                        </tr>
+                        <!-- 만기/갱신주기 -->
+                        <tr>
+                            <td class="gen-1" style="font-weight: bold;">만기/갱신주기</td>
+                            <td class="gen-1">80세 / 5년<br>(0809부터100세)</td>
+                            <td class="gen-2">3년</td>
+                            <td colspan="4" class="gen-2">(1년갱신 15년만기) - 만기시 재가입의사 필수</td>
+                            <td class="gen-4">1년갱신 5년만기</td>
+                            <td class="gen-5">1년갱신 5년만기</td>
+                        </tr>
+                        <!-- 보장비율 -->
+                        <tr>
+                            <td rowspan="2" class="gen-1" style="writing-mode: vertical-lr; text-orientation: upright; font-weight: bold; letter-spacing: 10px;">입원</td>
+                            <td class="gen-1" style="font-weight: bold;">보장비율</td>
+                            <td class="gen-1">100%</td>
+                            <td class="gen-2">90%</td>
+                            <td colspan="2" class="gen-2">표준형 80%<br>선택형 90%</td>
+                            <td colspan="2" class="gen-2">표준형 : 80%<br>선택형II: 급여90% / 비급여80%</td>
+                            <td class="gen-4">급여 80%,<br>비급여 70%</td>
+                            <td class="gen-5">급여 80% / 비급여<br>(중증 70%/비중증 50%)<br>* 비중증 병·의원 회당 300만원</td>
+                        </tr>
+                        <!-- 본인부담한도 -->
+                        <tr>
+                            <td class="gen-1" style="font-weight: bold;">본인부담한도</td>
+                            <td class="gen-1">-</td>
+                            <td colspan="6" class="gen-2">200만원</td>
+                            <td class="gen-4">급여 200만원</td>
+                            <td class="gen-5">급여 200만원<br>비급여(중증) 종합/상급종합<br>500만원</td>
+                        </tr>
+                        <!-- 외래공제 -->
+                        <tr>
+                            <td rowspan="2" class="gen-1" style="writing-mode: vertical-lr; text-orientation: upright; font-weight: bold; letter-spacing: 10px;">통원</td>
+                            <td class="gen-1" style="font-weight: bold;">외래공제</td>
+                            <td class="gen-1" rowspan="2">5천원</td>
+                            <td class="gen-2" rowspan="2">5천원/1만원</td>
+                            <td class="gen-2" rowspan="2">표준형 : MAX<br>1만,1.5만,2만원<br>중 공제</td>
+                            <td colspan="2" class="gen-2">표준형 : MAX<br>(1,1.5,2만 OR 20%)<br>선택형:1만~2만</td>
+                            <td class="gen-3" rowspan="2">표준형 : MAX<br>(1,1.5,2만 OR 20%)<br>선택형: MAX (1,1.5,2만 OR<br>급여10%, 비급여20%)</td>
+                            <td class="gen-4" rowspan="2">외래+처방 합산적용<br>급여 : MAX (1~2만 OR<br>20%)<br>비급여 : MAX (3만 OR<br>30%)</td>
+                            <td class="gen-5" rowspan="2">급여 : MAX(건보본인부담률,<br>20%, 1~2만원)<br>비급여 (중증) :<br>MAX (30%, 3만)<br>비급여 (비중증) :<br>MAX (50%, 5만)</td>
+                        </tr>
+                        <!-- 처방조제비 공제 -->
+                        <tr>
+                            <td class="gen-1" style="font-weight: bold;">처방조제비 공제</td>
+                            <td colspan="2" class="gen-2">표준형 : MAX<br>(8천원 OR 20%)<br>선택형 :8천원</td>
+                        </tr>
+                        <!-- 3대비급여 -->
+                        <tr>
+                            <td colspan="2" class="gen-1" style="font-weight: bold;">3대비급여<br><span style="font-size: 10px; font-weight: normal; color: #555;">*도수/증식치료/체외충격파<br>350만(50회), 주사제 250만<br>(50회), MRI/MRA 300만</span></td>
+                            <td colspan="6" class="gen-2">부책</td>
+                            <td class="gen-3">공제 :<br>MAX (2만 OR 30%)</td>
+                            <td class="gen-4">공제 :<br>MAX (3만 OR 30%)</td>
+                            <td class="gen-5 gen-5-bottom">공제 : MAX (3만 OR 30%)<br>*면책: (비중증 비급여) 근골격계<br>이학요법, 체외충격파치료,주사제</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
