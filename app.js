@@ -670,7 +670,9 @@ function showPlanDetail(plan) {
         document.getElementById('pd-prev-sim-wrapper').style.display = 'block';
         
         const extendedReason = plan[11];
-        if (extendedReason) {
+        if (reasonType === "내 설계 불러오기") {
+            descEl.textContent = "";
+        } else if (extendedReason) {
             descEl.textContent = extendedReason;
         } else {
             descEl.textContent = "고객님의 가입정보를 기반 중 암/뇌/심 중증질환 기왕력 및 다빈도질환 이력이 비슷한 고객님들이 많이 가입한 상품 중 보장 자산이 많이 담긴 설계를 추천 드립니다.";
