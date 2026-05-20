@@ -668,7 +668,13 @@ function showPlanDetail(plan) {
     } else {
         document.getElementById('pd-sim-wrapper').style.display = 'block';
         document.getElementById('pd-prev-sim-wrapper').style.display = 'block';
-        descEl.textContent = "고객님의 가입정보를 기반 중 암/뇌/심 중증질환 기왕력 및 다빈도질환 이력이 비슷한 고객님들이 많이 가입한 상품 중 보장 자산이 많이 담긴 설계를 추천 드립니다.";
+        
+        const extendedReason = plan[11];
+        if (extendedReason) {
+            descEl.textContent = extendedReason;
+        } else {
+            descEl.textContent = "고객님의 가입정보를 기반 중 암/뇌/심 중증질환 기왕력 및 다빈도질환 이력이 비슷한 고객님들이 많이 가입한 상품 중 보장 자산이 많이 담긴 설계를 추천 드립니다.";
+        }
 
         if (reasonType === "고객 개인화 추천") {
             titleEl.textContent = "[설계 주제] 고객 맞춤 (유사고객)";
@@ -680,6 +686,16 @@ function showPlanDetail(plan) {
             statEl.innerHTML = "우수 플래너들이 가장 많이 설계한 <strong>Top 3</strong> 구성입니다.";
             simEl.textContent = "92.5%";
             prevSimEl.textContent = "81.2%";
+        } else if (reasonType === "내 설계 불러오기") {
+            titleEl.textContent = "[설계 주제] 내 설계 불러오기";
+            statEl.innerHTML = "기존에 고객님께서 직접 <strong>저장하신 설계안</strong>입니다.";
+            document.getElementById('pd-sim-wrapper').style.display = 'none';
+            document.getElementById('pd-prev-sim-wrapper').style.display = 'none';
+        } else if (reasonType === "지점장추천" || reasonType === "본사추천" || reasonType === "지역단추천") {
+            titleEl.textContent = `[설계 주제] ${reasonType}`;
+            statEl.innerHTML = `해당 플랜은 <strong>${reasonType}</strong>으로 선정된 우수 설계안입니다.`;
+            document.getElementById('pd-sim-wrapper').style.display = 'none';
+            document.getElementById('pd-prev-sim-wrapper').style.display = 'none';
         } else {
             titleEl.textContent = "[설계 주제] 최신 트렌드";
             statEl.innerHTML = "최근 3개월 지점 내 최다 판매를 기록한 <strong>인기 트렌드</strong> 상품입니다.";
@@ -1086,7 +1102,7 @@ function handleRecommendedAiRequest() {
     const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
     
     // Create new plan based on selection
-    const newPlan = [currentCustomer.plans.length + 1, "추천설계 불러오기", "AI", currentCustomer.name, generatePlanId(), item.prod, dateStr, item.premium, "100", "정상", ""];
+    const newPlan = [currentCustomer.plans.length + 1, item.theme, "AI", currentCustomer.name, generatePlanId(), item.prod, dateStr, item.premium, "100", "정상", "", item.reason];
     
     currentCustomer.plans.push(newPlan);
     
